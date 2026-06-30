@@ -21,6 +21,6 @@ jobs:
     - name: Deploy the Containers with Docker Compose
       run: |
         docker compose pull
-        docker compose up -d this is my CD code  
+        docker compose up -d   
     
   
