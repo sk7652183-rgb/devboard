@@ -39,12 +39,10 @@ jobs:
           file: ./frontend/Dockerfile.multistage
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/devboard-frontend:latest
-    
-    
 
-
-    backend:
-     steps:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
      - name: Checkout code
        uses: actions/checkout@v7
      - name: setup go
