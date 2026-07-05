@@ -36,7 +36,7 @@ jobs:
        uses: docker/build-push-action@v7
        with:
           context: ./frontend
-          file: ./frontend/Dockerfile.multistage
+          file: ./frontend/Dockerfile
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/devboard-frontend:latest
 

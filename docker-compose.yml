@@ -12,6 +12,7 @@
 
 services:
   postgres:
+    container_name: postgres
     image: postgres:16-alpine
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -25,30 +26,41 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+    networks:
+      - dev-net
     ports:
       - "${POSTGRES_HOST_PORT}:5432"
 
   backend:
+    container_name: backend
     # build = local; image = the tag CI pushes and CD pulls (IMAGE_TAG, else latest).
     build: ./backend
-    image: sufiyn/devboard-backend:${IMAGE_TAG:-latest}
+    image:  sufiyn/devboard-backend:${IMAGE_TAG:-latest}
     environment:
       PORT: "${BACKEND_PORT}"
-      # Built from the Postgres vars above so the credentials live in one place.
       POSTGRES_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable"
     depends_on:
       postgres:
         condition: service_healthy
+    networks:
+      - dev-net
     ports:
       - "${BACKEND_HOST_PORT}:${BACKEND_PORT}"   # host:container — direct curl/debug; the UI uses the gateway
 
   frontend:
+    container_name: devboard-frontend
     build: ./frontend
     image: sufiyn/devboard-frontend:${IMAGE_TAG:-latest}
     depends_on:
       - backend
+    networks:
+      - dev-net
     ports:
-      - "${FRONTEND_HOST_PORT}:80" 
+      - "${FRONTEND_HOST_PORT}:4173"   # vite preview serves on 4173 inside the container
 
 volumes:
   pgdata:
+
+networks:
+  dev-net:
+    driver: bridge
