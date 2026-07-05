@@ -28,7 +28,11 @@ COPY --from=build /app/node_modules ./node_modules
 COPY vite.preview.config.js ./vite.config.js
 
 EXPOSE 4173
+<<<<<<< HEAD
 
 # Use exec form for proper signal handling
 ENTRYPOINT ["node", "--no-warnings"]
 CMD ["./node_modules/.bin/vite", "preview", "--host", "0.0.0.0", "--port", "4173"]
+=======
+CMD ["vite", "preview", "--host", "0.0.0.0", "--port", "4173"]
+>>>>>>> advanced

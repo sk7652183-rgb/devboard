@@ -1,28 +1,41 @@
-# Goal: To deploy the built images from CI Steps once the CI Worklow is Succeeded
+# Goal: To deploy the built images from CI steps once the CI workflow is succeeded
 
 name: CD
 
-on: 
-    workflow_call:
+on:
+  workflow_call:
 
 jobs:
-    deploy:
-        
-        runs-on: self-hosted
-        steps:
-            - name: Code Checkout
-              uses: actions/checkout@v7
+  deploy:
+    runs-on: self-hosted
 
-            - name: Copy Example Env to main env
-              run: cp .env.example .env
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v7
 
-            - name: Docker Setup [Login]
-              uses: docker/login-action@v4
-              with:
-                username: ${{ vars.DOCKERHUB_USERNAME }}
-                password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Copy Example Env File
+        run: cp .env.example .env
 
-            - name: Deploy the containers with Docker Compose
-              run: |
-                docker compose pull
-                docker compose up -d
+      - name: Docker login
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Deploy the Containers with Docker Compose
+        run: |
+          echo "Stopping existing containers..."
+          docker compose down
+
+          echo "Pulling latest images..."
+          docker compose pull
+
+          echo "Starting fresh containers..."
+          docker compose up -d --force-recreate
+
+      # ==============================
+      # 🧹 OPTIONAL: CLEAN UNUSED CACHE
+      # ==============================
+      - name: Clean Docker cache (optional)
+        run: |
+          docker system prune -af
