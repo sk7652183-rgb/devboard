@@ -1,43 +1,43 @@
-# Goal - I have to do SAST for my Code
+# Goal - I have to do SAST for my code 
 
 name: Code Quality
 
-on:
-    workflow_call:  # you can call this workflow before/after any other workflow
+on : 
+  workflow_call: # you can call this workflow from another workflow
 
 jobs:
-    sast:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Code Checkout
-              uses: actions/checkout@v7
-            
-            - name: Setup NodeJs
-              uses: actions/setup-node@v6
-              with:
-                node-version: '20'
-                cache: npm
-                cache-dependency-path: frontend/package-lock.json
-            
-            - name: Install npm Packages
-              run: npm install --legacy-peer-deps
-              working-directory: frontend
+  sast:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v7
 
-            - name: Run Linter
-              run: npm run lint
-              working-directory: frontend
+      - name: setup nodejs
+        uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
 
-            - name: Setup Go
-              uses: actions/setup-go@v6
-              with:
-                go-version: '1.23'
-                go-version-file: 'go.mod'
-                cache-dependency-path: go.sum
-            
-            - name: Run Go Formatter
-              run: go fmt
-              working-directory: backend
+      - name: Install packages
+        run: npm install
+        working-directory: frontend
 
-            - name: Run Go Vet
-              run: go vet
-              working-directory: backend
+      - name: Lint
+        run: npm run lint
+        working-directory: frontend
+
+      - name: setup go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.22'
+          cache: true
+          cache-dependency-path: backend/go.sum
+
+      - name: Run go formatter
+        run: go fmt ./...
+        working-directory: backend
+
+      - name: Run go vet
+        run: go vet ./...
+        working-directory: backend
