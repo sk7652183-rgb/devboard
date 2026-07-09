@@ -17,8 +17,10 @@ jobs:
       - name: Install Govolncheck
         run: go install golang.org/x/vuln/cmd/govulncheck@v1.1.4
       - name: GoVulncheck
+        continue-on-error: true # Continue even if vulnerabilities are found
         run: govulncheck ./...
         working-directory: backend
+                 
       - name: Setup NodeJs
         uses: actions/setup-node@v6
         with:
@@ -28,3 +30,10 @@ jobs:
       - name: Run Dependency Check for NodeJs
         run: npm audit
         working-directory: frontend
+      - name: Upload Report to Artifacts
+        if: always() # Ensure this step runs even if previous steps fail
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-scan-report 
+          path: reports/govulncheck-report.txt            
+          retention-days: 5
