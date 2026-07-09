@@ -7,7 +7,12 @@ on:
 
         # Code Stage with Shift-left
 jobs:
+    # Code Stage with Shift-left
     code_quality:
         uses: ./.github/workflows/code-quality.yml
     secret-scanning:
+    # Secret Scanning Stage
         uses: ./.github/workflows/secret-scanning.yml
+    # Dependency Scanning Stage
+    dependency-scanning:
+        uses: ./.github/workflows/dependency-scan.yml
