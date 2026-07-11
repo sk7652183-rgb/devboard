@@ -19,3 +19,4 @@ jobs:
     # Docker Scanning Stage
     docker-checks:
         uses: ./.github/workflows/docker-scans.yml
+        secrets: inherit
