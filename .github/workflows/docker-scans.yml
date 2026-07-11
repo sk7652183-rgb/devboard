@@ -34,3 +34,5 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL'
+          cache: 'false'
+          skip-db-update: false
