@@ -22,5 +22,5 @@ USER nonroot
 
 EXPOSE 8080
 
-# Use exec form for proper signal handling
+# Use exec form to ensure signals are forwarded to the binary and that it can be properly shut down
 ENTRYPOINT ["./devboard-backend"]
