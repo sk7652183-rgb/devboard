@@ -1,4 +1,4 @@
-FROM node:20.19.0-alpine AS build
+FROM node:20.19.0-alpine3.22 AS build
 
 WORKDIR /app
 
@@ -10,11 +10,11 @@ COPY . .
 
 RUN npm run build
 
-FROM node:20.19.0-alpine
+FROM node:20.19.0-alpine3.22
 
 WORKDIR /app
 
-RUN npm install -g vite@5 && npm cache clean --force
+RUN npm install -g vite@latest && npm cache clean --force
 
 COPY --from=build /app/dist ./dist
 
