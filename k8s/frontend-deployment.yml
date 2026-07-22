@@ -6,7 +6,7 @@ metadata:
   labels:
     app: devboard-frontend
 spec:
-  replicas: 5
+  replicas: 1
   selector:
     matchLabels:
       app: devboard-frontend
@@ -16,8 +16,15 @@ spec:
         app: devboard-frontend
     spec:
       containers:
-      - name: devboard-frontend
-        image: sufiyn/devboard-main
-        ports:
-        - containerPort: 4173
+        - name: devboard-frontend
+          image: sufiyn/devboard-main
+          ports:
+            - containerPort: 4173
 
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi

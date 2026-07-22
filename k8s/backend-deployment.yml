@@ -18,6 +18,7 @@ spec:
       containers:
         - name: devboard-backend
           image: sufiyn/devboard-backend:latest
+
           ports:
             - containerPort: 8080
 
@@ -41,14 +42,14 @@ spec:
                   key: POSTGRES_DB
 
             - name: POSTGRES_URL
-              value: postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres:5432/$(POSTGRES_DB)?sslmode=disable
+              value: "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres:5432/$(POSTGRES_DB)?sslmode=disable"
 
             - name: PORT
               value: "8080"
-      
-      livenessProbe:
-        httpGet:
-          path: /health 
-          port: 8080
-        initialDelaySeconds: 10
-        periodSeconds: 15
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 15
